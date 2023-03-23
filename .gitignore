@@ -2,3 +2,6 @@
 *.exe
 .cph/
 .vscode/
+*.in
+*.out
+*.ans
