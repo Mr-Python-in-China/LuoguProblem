@@ -1,99 +1,173 @@
 #include<bits/stdc++.h>
-using namespace std;
-using ui=unsigned int;
-const size_t NULLPOS=-1;
-template<typename T> class splay{
-	struct node{
-		size_t child[2],fa,size,cnt;T val;
-		node(T _val,size_t _fa=NULLPOS,size_t cnt=1,size_t l=NULLPOS,size_t r=NULLPOS){
-			val=_val,child[0]=l,child[1]=r,fa=_fa,size=cnt;
-		}
-		inline static bool operator<(const node a,const node b){return a.val<b.val;}
-	};
-	vector<node> tree;
-	size_t root=NULLPOS;
-	inline void pushup(size_t pos){
-		tree[pos].size=cnt;
-	}
-	void rotate(size_t pos,bool dc){
-		T& fa=tree[pos].fa;
-		tree[fa].child[!dc]=tree[pos].child[dc];
-		tree[tree[pos].child[dc]].fa=fa;
-		if (~tree[fa].fa) tree[tree[fa].fa].child[tree[tree[fa].fa].child[1]==fa]=pos;
-		tree[pos].fa=tree[fa].fa;
-		tree[pos].child[dc]=fa;
-		tree[fa].fa=pos;
-		pushup(fa);
-	}
-	void shift_to(size_t pos,size_t goal){
-		while (tree[pos].fa!=goal){
-			if (tree[tree[pos].fa].fa==goal) rotate(pos,tree[tree[pos].fa].child[0]==pos);
-			else{
-				T& fa=tree[pos].fa;
-				bool c=tree[tree[fa].fa].child[0]==y;
-				if (tree[fa].child[c]==pos) rotate(pos,!c);
-				else rotate(fa,c);
-				rotate(pos,c);
-			}
-		}
-		pushup(x);
-		if (!~goal) root=x;
-	}
-	T get_max(size_t x){
-		while (~tree[x].son[1]) x=tree[x].son[1];
-		return x;
-	}
-	bool remove_root(void){
-		if (~root){
-			if (~tree[root].son[0]){
-				T m=get_max(tree[root].son[0]);
-				shift_to(m,root);
-				tree[m].son[1]=tree[root].son[1];
-				pre[tree[root].son[1]]=m;
-				root=m;
-				pre[root]=NULLPOS;
-				pushup(root);
-			}else root=tree[root].son[1],pre[root]=NULLPOS;
-			return true;
-		}else return false;
-	}
-	bool remove_node(size_t x){
-		shift_to(x,NULLPOS);
-		remove_root();
-	}
-	void find(const T x,size_t& u,size_t& fa){
-		u=root,fa=NULLPOS;
-		while (~u&&tree[u].val!=x) 
-			fa=u,u=tree[u].son[x>tree[u].val];
-	}
-public:
-	void insert(const T x){
-		if (~root){
-			size_t u,fa;
-			find(x,u,fa);
-			if (~u) tree[u].cnt++;
-			else{
-				u=tree.size();
-				tree.push_back(node(x,fa))
-				tree[fa].son[x>tree[ff].val]=u;
-			}
-			shift_to(u,NULLPOS);
-		}else{
-			root=tree.size();
-			tree.push_back(node(x));
-		}
-	}
-	bool erase(const T x){
-		size_t u,fa;
-		find(x,u,fa);
-		if (~u){
-			if (!--tree[u].cnt) remove_root();
-			return true;
-		}else return false;
-	}
-};
-#define ID 0
-int main(void){
-	ios::sync_with_stdio(false),cin.tie(nullptr);
+namespace mp{
+    template<typename T,typename alloc=std::allocator<T>> class SplayTree{
+        struct Node{
+            T val;
+            size_t sz;
+            Node *left,*right,*fa;
+            Node(T _val):val(_val),sz(1),left(nullptr),right(nullptr),fa(nullptr){}
+            Node(T _val,Node *_fa):Node(_val){fa=_fa;}
+        }* root;
+        using key_reference=T const&;
+        void update(Node* p){ //更新大小
+            p->sz=1;
+            if (p->left) p->sz+=p->left->sz;
+            if (p->right) p->sz+=p->right->sz;
+        }
+        void rotate(Node* x){
+            Node* y=x->fa,z=y->fa; //y是x的父亲，z是y的爷爷
+            //先让z的孩子y变为x
+            if (!z) root=x; //x没有爷爷（y是根）
+            else if (z->left==y) z->left=x; //y是z的左孩子
+            else z->right=x; //y是z的右孩子
 
+            if (y->left==x){ //x是y的左孩子 右旋
+                /*
+                        +-+
+                        |y|
+                        +-+
+                       /   \
+                    +-+     +-+
+                    |x|     |c|
+                    +-+     +-+
+                   /   \
+                +-+     +-+
+                |a|     |b|
+                +-+     +-+
+                ------to-------
+                    +-+
+                    |x|
+                    +-+
+                   /   \
+                +-+     +-+
+                |a|     |y|
+                +-+     +-+
+                       /   \
+                    +-+     +-+
+                    |b|     |c|
+                    +-+     +-+
+                */
+                y->left=x->right; //让b挂到y的左边
+                if (x->left) x->left->fa=y; //更改b的父亲为y
+                x->right=y; //让y挂到x的右边
+            }else{ //x是y的右孩子 左旋
+                /*
+                    +-+
+                    |y|
+                    +-+
+                   /   \
+                +-+     +-+
+                |a|     |x|
+                +-+     +-+
+                       /   \
+                    +-+     +-+
+                    |b|     |c|
+                    +-+     +-+
+                ------to-------
+                        +-+
+                        |x|
+                        +-+
+                       /   \
+                    +-+     +-+
+                    |y|     |c|
+                    +-+     +-+
+                   /   \
+                +-+     +-+
+                |a|     |b|
+                +-+     +-+
+                */
+            y->right=x->left;
+            if (x->left) x->left->fa=y;
+            x->left=y;
+            }
+            update(y),update(x); //先更新更底层的，再更新上面
+            x->fa=z,y->fa=x;
+        }
+        void splay(Node* x){
+            while (x->fa){ //重复执行知道p为树根（无父亲）
+                Node* y=x->fa,z=y->fa;
+                if (z){
+                    if ((z->left==y)==(y->left==x)) rotate(y); //同侧局面
+                    else rotate(x); //异侧局面
+                }
+                rotate(x); //无论怎样最后都要旋一次x
+            }
+        }
+        Node* find(T val){ //同二叉查找树
+            Node* x=root;
+            while (x&&x->val!=val) x=(val<x->val?x->left:x->right);
+            if (x) splay(x); //顺手把x转上去
+            return x;
+        }
+    public:
+        class iterator{
+            Node* p;
+        public:
+            iterator(void):p(nullptr){}
+            iterator(T* _p):p(_p){}
+            iterator operator++(iterator){
+                Node* lst=nullptr;
+                while (p&&p->right&&p->right!=lst) lst=p,p=p->fa;
+                if (p) p=p->right;
+                return *this;
+            }
+            iterator operator--(iterator){
+                
+                Node* lst=nullptr;
+                while (p&&p->left&&p->left!=lst) lst=p,p=p->fa;
+                if (p) p=p->left;
+                return *this;
+            }
+            iterator operator++(void){
+                iterator res=*this;
+                ++*this;
+                return res;
+            }
+            iterator operator--(void){
+                iterator res=*this;
+                --*this;
+                return res;
+            }
+            T* operator->(void){return p;}
+            T& operator*(void){return &p;}
+            friend bool operator==(iterator const& a,iterator const& b){return a.p==b.p;}
+            friend bool operator!=(iterator const& a,iterator const& b){return a.p!=b.p;}
+        }
+        SplayTree(void):root(nullptr){}
+        bool insert(T val){
+            if (!root) root=alloc::allocate(1),root(val); //如果空树直接挂到根节点
+            else{
+                Node* x=root,y=nullptr; //y为x的父亲
+                while (x){
+                    y=x;
+                    if (val==x->val) return false;
+                    else x=(val<x->val?x->left:x->right); //找一个精准落点~
+                }
+                Node p=alloc::allocate(1),root(val,y);
+                (val<y->fal?y->left:y->right)=p; //挂左边还是右边？
+                splay(p); //顺手转上去
+            }
+            return true;
+        }
+        bool find_able(T val){return find(val);} //是否有这个数
+        bool remove(int val){
+            Node* x=find(val); //查找val，此时find函数顺手把x转了上去（即x为根）
+            if (!x) return false;
+            if (!x->left&&!x->right) root=nullptr;
+            else if (!x->left) root=x->right,root->fa=nullptr; //若没有左子树则直接将右节点挂到根上
+            else if (!x->right) root=x->left,root->fa=nullptr; //若没有右子树则直接将左节点挂到根上
+            else{ //一个健全的节点
+                Node *lm=x->left; //左子树最大的节点
+                while (lm->right) lm=lm->right; //一直往右走保证最大
+                splay(lm); //转上去（为什么可以直接挂载右节点？）
+                lm->right=x->right;
+                x->right->parent=lm;
+                root=lm,lm->fa=nullptr;
+                update(lm);
+            }
+            alloc::deallocate(root,1);
+            return true;
+        }
+        inline size_t sz(void){return root?root->sz:0;}
+    };
 }
