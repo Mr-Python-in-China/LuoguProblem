@@ -1,17 +1,20 @@
-#include<bits/stdc++.h>
+#include<iostream>
 using namespace std;
-using ui=unsigned int;
 int main(void){
-    ios::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
-    size_t n;ui lst;unsigned long long int len=1,ans=0;
-    cin>>n>>lst;
-    for (size_t i=1;i<n;i++){
-        ui now;
+    int n,len=1;long long ans=0;
+    cin>>n;
+    int lst;
+    cin>>lst;
+    for (int i=1;i<n;i++){
+        int now;
         cin>>now;
-        if (now>=lst) ans+=len*(len+1)>>1,len=0;
+        if (lst<=now){
+            ans+=(long long)len*(len+1)/2;
+            len=0;
+        }
         len++,lst=now;
     }
-    ans+=len*(len+1)>>1;
+    ans+=(long long)len*(len+1)/2;
     cout<<ans;
     return 0;
 }
