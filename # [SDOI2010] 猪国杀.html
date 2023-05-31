@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title># [SDOI2010] 猪国杀.md</title>
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+	<style>
+		/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+		/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+		body {
+			font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+			font-size: var(--vscode-markdown-font-size, 14px);
+			padding: 0 26px;
+			line-height: var(--vscode-markdown-line-height, 22px);
+			word-wrap: break-word;
+		}
+
+		#code-csp-warning {
+			position: fixed;
+			top: 0;
+			right: 0;
+			color: white;
+			margin: 16px;
+			text-align: center;
+			font-size: 12px;
+			font-family: sans-serif;
+			background-color: #444444;
+			cursor: pointer;
+			padding: 6px;
+			box-shadow: 1px 1px 1px rgba(0, 0, 0, .25);
+		}
+
+		#code-csp-warning:hover {
+			text-decoration: none;
+			background-color: #007acc;
+			box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
+		}
+
+		body.scrollBeyondLastLine {
+			margin-bottom: calc(100vh - 22px);
+		}
+
+		body.showEditorSelection .code-line {
+			position: relative;
+		}
+
+		body.showEditorSelection .code-active-line:before,
+		body.showEditorSelection .code-line:hover:before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 0;
+			left: -12px;
+			height: 100%;
+		}
+
+		body.showEditorSelection li.code-active-line:before,
+		body.showEditorSelection li.code-line:hover:before {
+			left: -30px;
+		}
+
+		.vscode-light.showEditorSelection .code-active-line:before {
+			border-left: 3px solid rgba(0, 0, 0, 0.15);
+		}
+
+		.vscode-light.showEditorSelection .code-line:hover:before {
+			border-left: 3px solid rgba(0, 0, 0, 0.40);
+		}
+
+		.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+			border-left: none;
+		}
+
+		.vscode-dark.showEditorSelection .code-active-line:before {
+			border-left: 3px solid rgba(255, 255, 255, 0.4);
+		}
+
+		.vscode-dark.showEditorSelection .code-line:hover:before {
+			border-left: 3px solid rgba(255, 255, 255, 0.60);
+		}
+
+		.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+			border-left: none;
+		}
+
+		.vscode-high-contrast.showEditorSelection .code-active-line:before {
+			border-left: 3px solid rgba(255, 160, 0, 0.7);
+		}
+
+		.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+			border-left: 3px solid rgba(255, 160, 0, 1);
+		}
+
+		.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+			border-left: none;
+		}
+
+		img {
+			max-width: 100%;
+			max-height: 100%;
+		}
+
+		a {
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
+		a:focus,
+		input:focus,
+		select:focus,
+		textarea:focus {
+			outline: 1px solid -webkit-focus-ring-color;
+			outline-offset: -1px;
+		}
+
+		hr {
+			border: 0;
+			height: 2px;
+			border-bottom: 2px solid;
+		}
+
+		h1 {
+			padding-bottom: 0.3em;
+			line-height: 1.2;
+			border-bottom-width: 1px;
+			border-bottom-style: solid;
+		}
+
+		h1,
+		h2,
+		h3 {
+			font-weight: normal;
+		}
+
+		table {
+			border-collapse: collapse;
+		}
+
+		table>thead>tr>th {
+			text-align: left;
+			border-bottom: 1px solid;
+		}
+
+		table>thead>tr>th,
+		table>thead>tr>td,
+		table>tbody>tr>th,
+		table>tbody>tr>td {
+			padding: 5px 10px;
+		}
+
+		table>tbody>tr+tr>td {
+			border-top: 1px solid;
+		}
+
+		blockquote {
+			margin: 0 7px 0 5px;
+			padding: 0 16px 0 10px;
+			border-left-width: 5px;
+			border-left-style: solid;
+		}
+
+		code {
+			font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+			font-size: 1em;
+			line-height: 1.357em;
+		}
+
+		body.wordWrap pre {
+			white-space: pre-wrap;
+		}
+
+		pre:not(.hljs),
+		pre.hljs code>div {
+			padding: 16px;
+			border-radius: 3px;
+			overflow: auto;
+		}
+
+		pre code {
+			color: var(--vscode-editor-foreground);
+			tab-size: 4;
+		}
+
+		/** Theming */
+
+		.vscode-light pre {
+			background-color: rgba(220, 220, 220, 0.4);
+		}
+
+		.vscode-dark pre {
+			background-color: rgba(10, 10, 10, 0.4);
+		}
+
+		.vscode-high-contrast pre {
+			background-color: rgb(0, 0, 0);
+		}
+
+		.vscode-high-contrast h1 {
+			border-color: rgb(0, 0, 0);
+		}
+
+		.vscode-light table>thead>tr>th {
+			border-color: rgba(0, 0, 0, 0.69);
+		}
+
+		.vscode-dark table>thead>tr>th {
+			border-color: rgba(255, 255, 255, 0.69);
+		}
+
+		.vscode-light h1,
+		.vscode-light hr,
+		.vscode-light table>tbody>tr+tr>td {
+			border-color: rgba(0, 0, 0, 0.18);
+		}
+
+		.vscode-dark h1,
+		.vscode-dark hr,
+		.vscode-dark table>tbody>tr+tr>td {
+			border-color: rgba(255, 255, 255, 0.18);
+		}
+	</style>
+
+	<style>
+		/* Tomorrow Theme */
+		/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+		/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+		/* Tomorrow Comment */
+		.hljs-comment,
+		.hljs-quote {
+			color: #8e908c;
+		}
+
+		/* Tomorrow Red */
+		.hljs-variable,
+		.hljs-template-variable,
+		.hljs-tag,
+		.hljs-name,
+		.hljs-selector-id,
+		.hljs-selector-class,
+		.hljs-regexp,
+		.hljs-deletion {
+			color: #c82829;
+		}
+
+		/* Tomorrow Orange */
+		.hljs-number,
+		.hljs-built_in,
+		.hljs-builtin-name,
+		.hljs-literal,
+		.hljs-type,
+		.hljs-params,
+		.hljs-meta,
+		.hljs-link {
+			color: #f5871f;
+		}
+
+		/* Tomorrow Yellow */
+		.hljs-attribute {
+			color: #eab700;
+		}
+
+		/* Tomorrow Green */
+		.hljs-string,
+		.hljs-symbol,
+		.hljs-bullet,
+		.hljs-addition {
+			color: #718c00;
+		}
+
+		/* Tomorrow Blue */
+		.hljs-title,
+		.hljs-section {
+			color: #4271ae;
+		}
+
+		/* Tomorrow Purple */
+		.hljs-keyword,
+		.hljs-selector-tag {
+			color: #8959a8;
+		}
+
+		.hljs {
+			display: block;
+			overflow-x: auto;
+			color: #4d4d4c;
+			padding: 0.5em;
+		}
+
+		.hljs-emphasis {
+			font-style: italic;
+		}
+
+		.hljs-strong {
+			font-weight: bold;
+		}
+	</style>
+
+	<style>
+		/*
+ * Markdown PDF CSS
+ */
+
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+			padding: 0 12px;
+		}
+
+		pre {
+			background-color: #f8f8f8;
+			border: 1px solid #cccccc;
+			border-radius: 3px;
+			overflow-x: auto;
+			white-space: pre-wrap;
+			overflow-wrap: break-word;
+		}
+
+		pre:not(.hljs) {
+			padding: 23px;
+			line-height: 19px;
+		}
+
+		blockquote {
+			background: rgba(127, 127, 127, 0.1);
+			border-color: rgba(0, 122, 204, 0.5);
+		}
+
+		.emoji {
+			height: 1.4em;
+		}
+
+		code {
+			font-size: 14px;
+			line-height: 19px;
+		}
+
+		/* for inline code */
+		:not(pre):not(.hljs)>code {
+			color: #C9AE75;
+			/* Change the old color so it seems less like an error */
+			font-size: inherit;
+		}
+
+		/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+		.page {
+			page-break-after: always;
+		}
+	</style>
+
+	<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<script
+		type="text/x-mathjax-config"> MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });</script>
+</head>
+
+<body>
+	<script>
+		mermaid.initialize({
+			startOnLoad: true,
+			theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+				? 'dark'
+				: 'default'
+		});
+	</script>
+	<h1 id="sdoi2010-%E7%8C%AA%E5%9B%BD%E6%9D%80">[SDOI2010] 猪国杀</h1>
+	<h2 id="%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0">题目描述</h2>
+	<h3 id="%E6%B8%B8%E6%88%8F%E8%83%8C%E6%99%AF">游戏背景</h3>
+	<p>《猪国杀》是一种多猪牌类回合制游戏，一共有 $3$ 种角色：主猪，忠猪，反猪。每局游戏主猪有且只有 $1$ 只，忠猪和反猪可以有多只，每只猪扮演 $1 $ 种角色。</p>
+	<h3 id="%E6%B8%B8%E6%88%8F%E7%9B%AE%E7%9A%84">游戏目的</h3>
+	<p>主猪 / $\texttt{MP}$：自己存活的情况下消灭所有的反猪。<br>
+		忠猪 / $\texttt{ZP}$：不惜一切保护主猪，胜利条件与主猪相同。<br>
+		反猪 / $\texttt{FP}$：杀死主猪。</p>
+	<h3 id="%E6%B8%B8%E6%88%8F%E8%BF%87%E7%A8%8B">游戏过程</h3>
+	<p>游戏开始时，每个玩家手里都会有 $4$ 张牌，且体力上限和初始体力都是 $4$ 。</p>
+	<p>开始游戏时，从主猪开始，按照逆时针方向（数据中就是按照编号从 $ 1 , 2, 3 \ldots n , 1 \ldots $ 的顺序）依次行动。</p>
+	<p>每个玩家自己的回合可以分为 2 个阶段：</p>
+	<ul>
+		<li><strong>摸牌阶段</strong>：从牌堆顶部摸 $2$ 张牌，依次放到手牌的最右边；</li>
+		<li><strong>出牌阶段</strong>：你可以使用任意张牌，每次使用牌的时候都使用最靠左的能够使用的牌。当然，要满足如下规则：
+			<ol>
+				<li>如果没有猪哥连弩，每个出牌阶段只能使用 $1$ 次「杀」来攻击；</li>
+				<li>任何牌被使用后被弃置（武器是装备上）；被弃置的牌以后都不能再用，即与游戏无关。</li>
+			</ol>
+		</li>
+	</ul>
+	<h3 id="%E5%90%84%E7%A7%8D%E7%89%8C%E4%BB%8B%E7%BB%8D">各种牌介绍</h3>
+	<p>每张手牌用 $1$ 个字母表示，字母代表牌的种类。</p>
+	<h4 id="%E5%9F%BA%E6%9C%AC%E7%89%8C">基本牌</h4>
+	<ul>
+		<li>
+			<p>『桃 / $\texttt{P}$』在自己的回合内，如果自己的体力值不等于体力上限，那么使用 $1$ 个桃可以为自己补充 $1$ 点体力，否则不能使用桃；桃只能对自己使用；在自己的回合外，如果自己的血变为
+				$0$ 或者更低，那么也可以使用。</p>
+		</li>
+		<li>
+			<p>『杀 / $\texttt{K}$』在自己的回合内，对攻击范围内除自己以外的 $1$ 名角色使用。如果没有被『闪』抵消，则造成 $1$ 点伤害。无论有无武器，杀的攻击范围都是 $1$。</p>
+		</li>
+		<li>
+			<p>『闪 / $\texttt{D}$』当你受到杀的攻击时，可以弃置 $1$ 张闪来抵消杀的效果。</p>
+		</li>
+	</ul>
+	<h4 id="%E9%94%A6%E5%9B%8A%E7%89%8C">锦囊牌</h4>
+	<ul>
+		<li>
+			<p>『决斗 / $\texttt{F}$』出牌阶段，对除自己以外任意 $1$ 名角色使用，由目标角色先开始，自己和目标角色轮流弃置 $1$ 张杀，首先没有杀可弃的一方受到 $1$ 点伤害，另一方视为此伤害的来源。
+			</p>
+		</li>
+		<li>
+			<p>『南猪入侵 / $\texttt{N}$』出牌阶段，对除你以外所有角色使用，按逆时针顺序从使用者下家开始依次结算，除非弃置 $1$ 张杀，否则受到 $1$ 点伤害。</p>
+		</li>
+		<li>
+			<p>『万箭齐发 / $\texttt{W}$』和南猪入侵类似，不过要弃置的不是杀而是闪。</p>
+		</li>
+		<li>
+			<p>『无懈可击 / $\texttt{J}$』在目标锦囊生效前抵消其效果。每次有 $1$
+				张锦囊即将生效时，从使用这张锦囊的猪开始，按照逆时针顺序，依次得到使用无懈可击的机会；效果：用于决斗时，决斗无效并弃置；用于南猪入侵或万箭齐发时，当结算到某个角色时才能使用，当前角色不需弃置牌并且不会受到伤害（仅对
+				$1$ 个角色产生效果）；用于无懈可击时，成为目标的无懈可击被无效。</p>
+		</li>
+	</ul>
+	<h4 id="%E8%A3%85%E5%A4%87%E7%89%8C">装备牌</h4>
+	<ul>
+		<li>『猪哥连弩 / $\texttt{Z}$』武器，攻击范围 $1$ ，出牌阶段你可以使用任意张杀; 同一时刻最多只能装 $1$ 把武器；如果先前已经有了 $1$
+			把武器，那么之后再装武器的话，会弃置以前的武器来装现在的武器。</li>
+	</ul>
+	<h3 id="%E7%89%B9%E6%AE%8A%E4%BA%8B%E4%BB%B6%E5%8F%8A%E6%A6%82%E5%BF%B5%E8%A7%A3%E9%87%8A">特殊事件及概念解释</h3>
+	<ul>
+		<li>
+			<p><strong>伤害来源</strong>：杀、南猪入侵、万箭齐发的伤害来源均是使用该牌的猪，决斗的伤害来源如上；</p>
+		</li>
+		<li>
+			<p><strong>距离</strong>：两只猪的距离定义为沿着逆时针方向间隔的猪数 $+1$ 。即初始时 $1$ 和 $2$ 的距离为 $1$ ，但是 $2$ 和 $1$ 的距离就是 $n-1$
+				。注意一个角色的死亡会导致一些猪距离的改变；</p>
+		</li>
+		<li>
+			<p><strong>玩家死亡</strong>：如果该玩家的体力降到 $0$ 或者更低，并且自己手中没有足够的桃使得自己的体力值回到 $1$ ，那么就死亡了，死亡后所有的牌（装备区，手牌区）被弃置；</p>
+		</li>
+		<li>
+			<p><strong>奖励与惩罚</strong>：反猪死亡时，最后一个伤害来源处（即使是反猪）立即摸 $3$ 张牌。忠猪死亡时，如果最后一个伤害来源是主猪，那么主猪所有装备牌、手牌被弃置。</p>
+		</li>
+	</ul>
+	<p>注意：一旦达成胜利条件，游戏立刻结束，因此即使会摸 $3$ 张牌或者还有牌可以用也不用执行了。</p>
+	<p>现在，我们已经知道每只猪的角色、手牌，还有牌堆初始情况，并且假设每个角色会按照如下的行为准则进行游戏，你需要做的就是告诉小猪 iPig 最后的结果。</p>
+	<h3 id="%E5%87%A0%E7%A7%8D%E8%A1%8C%E4%B8%BA">几种行为</h3>
+	<ul>
+		<li><strong>献殷勤</strong>：使用无懈可击挡下南猪入侵、万箭齐发、决斗；使用无懈可击抵消表敌意；</li>
+		<li><strong>表敌意</strong>：对某个角色使用杀、决斗；使用无懈可击抵消献殷勤；</li>
+		<li><strong>跳忠</strong>：即通过行动表示自己是忠猪。跳忠行动就是对主猪或对某只已经跳忠的猪献殷勤，或者对某只已经跳反的猪表敌意；</li>
+		<li><strong>跳反</strong>：即通过行动表示自己是反猪。跳反行动就是对主猪或对某只已经跳忠的猪表敌意，或者对某只已经跳反的猪献殷勤。</li>
+	</ul>
+	<p><strong>注意：忠猪不会跳反，反猪也不会跳忠；不管是忠猪还是反猪，能够跳必然跳</strong>。</p>
+	<h3 id="%E8%A1%8C%E5%8A%A8%E5%87%86%E5%88%99">行动准则</h3>
+	<h4 id="%E5%85%B1%E6%80%A7">共性</h4>
+	<ul>
+		<li>每个角色如果手里有桃且生命值未满，那么必然吃掉；</li>
+		<li>有南猪入侵、万箭齐发、必然使用；有装备必然装上；</li>
+		<li>受到杀时，有闪必然弃置；</li>
+		<li>响应南猪入侵或者万箭齐发时候，有杀 / 闪必然弃置；</li>
+		<li>不会对未表明身份的猪献殷勤（<strong>包括自己</strong>）。</li>
+	</ul>
+	<h4 id="%E7%89%B9%E6%80%A7">特性</h4>
+	<ul>
+		<li>主猪：
+			<ul>
+				<li>主猪会认为「没有跳身份，且用南猪入侵 / 万箭齐发对自己造成伤害的猪」是<strong>类</strong>反猪（没伤害到不算，注意类反猪并没有表明身份），如果之后跳了，那么主猪会重新认识这只猪；
+				</li>
+				<li>对于每种表敌意的方式，对逆时针方向能够执行到的第一只类反猪或者已跳反猪表；如果没有，那么就不表敌意；</li>
+				<li>决斗时会不遗余力弃置杀；</li>
+				<li>如果能对已经跳忠的猪或自己献殷勤，那么一定献；如果能够对已经跳反的猪表敌意，那么一定表。</li>
+			</ul>
+		</li>
+		<li>忠猪：
+			<ul>
+				<li>对于每种表敌意的方式，对「逆时针方向能够执行到的第一只已经跳反的猪」表，如果没有，那么就不表敌意；</li>
+				<li>决斗时，如果对方是主猪，那么不会弃置杀，否则，会不遗余力弃置杀；</li>
+				<li>如果有机会对主猪或者已经跳忠的猪献殷勤，那么一定献。</li>
+			</ul>
+		</li>
+		<li>反猪：
+			<ul>
+				<li>对于每种表敌意的方式，如果有机会则对主猪表，否则，对「逆时针方向能够执行到的第一只已经跳忠的猪」表，如果没有，那么就不表敌意；</li>
+				<li>决斗时会不遗余力弃置杀；</li>
+				<li>如果有机会对已经跳反的猪献殷勤，那么一定献。</li>
+			</ul>
+		</li>
+	</ul>
+	<p>限于 iPig 只会用 P++ 语言写 A + B，他请你用 Pigcal (Pascal)、P (C) 或 P++ (C++) 语言来帮他预测最后的结果。</p>
+	<h2 id="%E8%BE%93%E5%85%A5%E6%A0%BC%E5%BC%8F">输入格式</h2>
+	<p>输入文件第一行包含两个正整数 $ n $ $ (2 \leqslant n \leqslant 10) $ 和 $m$ $ (m \leqslant 2000) $，分别代表玩家数和牌堆中牌的数量。数据保证牌的数量够用。
+	</p>
+	<p>接下来 $n$ 行，每行 $5$ 个字符串，依次表示对第 $i$ 只猪的角色和初始 $4 $ 张手牌描述。编号为 $1$ 的肯定是主猪。</p>
+	<p>再接下来一行，一共 $m$ 个字符串，按照从牌堆顶部到牌堆底部的顺序描述每张牌。</p>
+	<p><strong>注意：所有的相邻的两个字符串都严格用 $1$ 个空格隔开，行尾没有多余空格</strong>。</p>
+	<h2 id="%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F">输出格式</h2>
+	<p>输出数据第一行包含一个字符串代表游戏结果。如果是主猪胜利，那么输出 $\texttt{MP}$ ，否则输出 $\texttt{FP}$ 。数据保证游戏总会结束。</p>
+	<p>接下来 $n$ 行，第 $i$ 行是对第 $i$ 只猪的手牌描述（注意只需要输出手牌），按照手牌从左往右的顺序输出，相邻两张牌用 $1$ 个空格隔开，行末尾没有多余空格。如果这只猪已阵亡，那么只要输出
+		$\texttt{DEAD}$ 即可。</p>
+	<p><strong>注意：如果要输出手牌而没有手牌的话，那么只需输出 $1$ 个空行</strong>。</p>
+	<p><strong>由于数据问题，若牌堆已空，按照每次抽牌抽到的都是最后一张。</strong></p>
+	<h2 id="%E6%A0%B7%E4%BE%8B-1">样例 #1</h2>
+	<h3 id="%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%85%A5-1">样例输入 #1</h3>
+	<pre class="hljs"><code><div>3 10
+MP D D F F
+ZP N N N D
+FP J J J J
+F F D D J J F F K D
+</div></code></pre>
+	<h3 id="%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%87%BA-1">样例输出 #1</h3>
+	<pre class="hljs"><code><div>FP
+DEAD
+DEAD
+J J J J J J D
+</div></code></pre>
+	<h2 id="%E6%8F%90%E7%A4%BA">提示</h2>
+	<h3 id="%E6%A0%B7%E4%BE%8B%E8%A7%A3%E9%87%8A">样例解释</h3>
+	<p>第一回合：</p>
+	<ul>
+		<li>主猪没有目标可以表敌意；</li>
+		<li>接下来忠猪使用了 $3$ 张南猪入侵，主猪掉了 $3$ 点体力，并认为该角色为类反猪，$3$ 号角色尽管手里有无懈可击，但是因为自己未表明身份，所以同样不能对自己用，乖乖掉 $3$ 点体力；</li>
+	</ul>
+	<p>下一回合：</p>
+	<ul>
+		<li>反猪无牌可出；</li>
+		<li>接下来主猪对着类反猪爆发，使用 $4$ 张决斗，忠猪死亡，结果主猪弃掉所有牌；</li>
+		<li>下来反猪摸到 $1$ 张杀直接杀死主猪获胜。</li>
+	</ul>
+	<h3 id="%E5%AD%90%E4%BB%BB%E5%8A%A1">子任务</h3>
+	<p>一共 $20$ 组测试数据，每个点 $5$ 分。</p>
+	<p>$10%$ 的数据没有锦囊牌，另外 $20%$ 的数据没有无懈可击。</p>
+
+</body>
+
+</html>
