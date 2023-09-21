@@ -28,6 +28,7 @@ template<typename T> class SGtree{
         void update(void){
             val+=(itvr-itvl)*lazy;
             if (itvr-itvl>1) nodel->lazy+=lazy,noder->lazy+=lazy;
+            lazy=0;
         }
         void add_interval(size_t l,size_t r,T const& v){
             if (no_matter(l,r)) return;

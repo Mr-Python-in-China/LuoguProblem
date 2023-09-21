@@ -6,3 +6,4 @@
 *.out
 *.ans
 *.code-workspace
+*.bitfile

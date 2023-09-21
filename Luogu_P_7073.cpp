@@ -1,54 +1,83 @@
-#include<bits/stdc++.h>
+#include<bits/extc++.h>
 using namespace std;
+namespace pbds=__gnu_pbds;
 using ui=unsigned int;
-const size_t N=1e5+1;
-struct op{bool type;ui val;};
-template<typename T> inline T string_to_number(string s){
-    T res=0;
-    for (string::reference i:s) res=res*10+i-'0';
+using uli=unsigned long long int;
+using li=long long int;
+struct node{
+    enum class OPT:char{AND,OR};
+    union{
+        OPT opt;
+        size_t varid;
+    }val;
+    node* l=nullptr,*r=nullptr;
+    bool fw=false;    // 废物标记
+    bool rev=false;   // 去反标记
+};
+node* make_expression(string& expression,vector<bool>& vars){
+    stack<node*> ptr;
+    for (string::iterator it=expression.begin();it!=expression.end();++it){
+        if (*it=='x'){
+            size_t id=0;
+            ++it;
+            while (*it!=' ') id=id*10+*(it++)-'0';
+            ptr.push(new node);
+            ptr.top()->val.varid=--id;
+        }else{
+            if (*it=='!') ptr.top()->rev^=1;
+            else{
+                node* r=ptr.top();ptr.pop();
+                node* l=ptr.top();ptr.pop();
+                ptr.push(new node);
+                ptr.top()->val.opt=(*it=='&'?node::OPT::AND:node::OPT::OR);
+                ptr.top()->l=l,ptr.top()->r=r;
+            }
+            ++it;
+        }
+    }
+    return ptr.top();
+}
+bool get_ans(node* root,vector<bool> const& vars){
+    bool res;
+    if (root->l&&root->r){
+        bool ans1=get_ans(root->l,vars),ans2=get_ans(root->r,vars);
+        if (root->val.opt==node::OPT::AND){
+            res=ans1&&ans2;
+            if (!ans1) root->r->fw=true;
+            if (!ans2) root->l->fw=true;
+        }else{
+            res=ans1||ans2;
+            if (ans1) root->r->fw=true;
+            if (ans2) root->l->fw=true;
+        }
+    }else res=vars[root->val.varid];
+    if (root->rev) res^=1;
     return res;
 }
-const ui AND=0,OR=1,NOT=2;
+void update_fw(node* root,vector<bool>& is_fw){
+    if (root->l&&root->r){
+        if (root->fw) root->l->fw=root->r->fw=true;
+        update_fw(root->l,is_fw),update_fw(root->r,is_fw);
+    }else if (root->fw) is_fw[root->val.varid]=true;
+}
 int main(void){
     ios::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
-    vector<op> exp;
-    ui n;
-    while (true){
-        string s;
-        cin>>s;
-        if (isdigit(s[0])){
-            n=string_to_number<ui>(s);
-            break;
-        }
-        if (s[0]=='x')
-            exp.push_back({0,string_to_number<ui>(s.substr(1))});
-        else exp.push_back({1,(s[0]=='&'?AND:s[0]=='|'?OR:NOT)});
-    }
-    vector<bool> val(n);
-    for (vector<bool>::reference i:val){bool b;cin>>b;i=b;}
-    ui q;
+    string s;
+    getline(cin,s);s+=' ';
+    size_t n;
+    cin>>n;
+    vector<bool> vars(n);
+    vector<bool> fw(n);
+    copy_n(istream_iterator<bool>(cin),n,vars.begin());
+    node* root=make_expression(s,vars);
+    bool ans=get_ans(root,vars);
+    update_fw(root,fw);
+    size_t q;
     cin>>q;
     while (q--){
-        ui p;
-        cin>>p;p--;
-        val[p]=!val[p];
-        stack<char> opt;stack<ui> num;
-        for (vector<op>::reverse_iterator it=exp.rbegin();it!=exp.rend();it++){
-            if (it->type) opt.push(it->val);
-            else if (opt.size()>1){
-                if (opt.top()==NOT&&num.size()>=1){
-                    bool tmp=val[num.top()];num.pop(),opt.pop();
-                    num.push(!tmp);
-                }else if (num.size()>=2){
-                    bool tmp=num.top();num.pop();
-                    opt.top()==AND?tmp&=num.top():tmp|=num.top();
-                    num.pop(),opt.pop();
-                    num.push(tmp);
-                }
-            }else num.push(it->val);
-        }
-        val[p]=!val[p];
-        cout<<num.top()<<'\n';
+        size_t x;
+        cin>>x;--x;
+        cout<<(ans^fw[x]^1)<<'\n';
     }
     return 0;
 }
