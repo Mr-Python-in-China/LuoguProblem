@@ -1,57 +1,35 @@
-#include <bits/stdc++.h>
+#include<bits/extc++.h>
 using namespace std;
-using ui = unsigned int;
-using Graph = vector<set<ui>>;
-void dijkstra(Graph &mp, vector<pair<ui, ui>> &dis, ui s)
-{
-    using node = pair<ui, ui>;
-    vector<bool> vis(mp.size());
-    priority_queue<node, vector<node>, greater<node>> q;
-    q.push(node(0, s));
-    dis[s].first = 0;
-    while (!q.empty())
-    {
-        ui tmp = q.top().second;
-        q.pop();
-        if (!vis[tmp])
-        {
-            vis[tmp] = true;
-            for (set<ui>::const_reference v : mp[tmp])
-                if (dis[v].first > dis[tmp].first + 1)
-                    dis[v].first = dis[tmp].first + 1,
-                    dis[v].second = tmp,
-                    q.push(node(dis[v].first, v));
+namespace pbds=__gnu_pbds;
+using ui=unsigned int;
+using uli=unsigned long long int;
+using li=long long int;
+using graph=vector<vector<size_t>>;
+int main(void){
+    ios::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
+    size_t n,m;
+    cin>>n>>m;
+    graph mp(n);
+    for (size_t i=0;i<m;++i){
+        size_t x,y;
+        cin>>x>>y;--x,--y;
+        mp[x].push_back(y),mp[y].push_back(x);
+    }
+    vector<vector<size_t>> dist(n,vector<size_t>(n,-1));
+    for (size_t i=0;i<n;++i){
+        queue<size_t> q({i});
+        dist[i][i]=0;
+        while (!q.empty()){
+            size_t p=q.front();q.pop();
+            for (size_t j:mp[p]) if (!~dist[i][j])
+                dist[i][j]=dist[i][p]+1,q.push(j);
         }
     }
-}
-int main(void)
-{
-    ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    ui n, m;
-    cin >> n >> m;
-    Graph mp(n);
-    for (ui i = 0; i < m; i++)
-    {
-        ui x, y;
-        cin >> x >> y;
-        x--, y--;
-        mp[x].insert(y), mp[y].insert(x);
-    }
-    vector<pair<ui, ui>> dis(n, {0x7fffffff, -1});
-    dijkstra(mp, dis, 0);
-    ui s1, t1, s2, t2;
-    cin >> s1 >> t1 >> s2 >> t2;
-    --s1, --s2;
-    if (dis[s1].first > t1 || dis[s2].first > t2)
-    {
-        cout << "-1";
-        return 0;
-    }
-    set<pair<ui, ui>> edges;
-    for (ui i = s1, j = dis[i].second; ~j; i = j, j = dis[i].second)
-        edges.insert({min(i, j), max(i, j)}), cout << i + 1 << ',' << j + 1 << ' ';
-    for (ui i = s2, j = dis[i].second; ~j; i = j, j = dis[i].second)
-        edges.insert({min(i, j), max(i, j)}), cout << i + 1 << ',' << j + 1 << ' ';
-    cout << m - edges.size();
+    size_t s1,t1,s2,t2,ans=-1;
+    cin>>s1>>t1>>s2>>t2;--s1,--s2;
+    for (size_t i=0;i<n;++i)
+        if (dist[0][i]+dist[i][s1]<=t1&&dist[0][i]+dist[i][s2]<=t2)
+            ans=min(ans,dist[0][i]+dist[i][s1]+dist[i][s2]);
+    ans==-1?cout<<"-1":cout<<m-ans;
     return 0;
 }

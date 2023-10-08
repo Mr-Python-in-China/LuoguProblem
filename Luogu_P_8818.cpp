@@ -30,11 +30,24 @@ int main(void){
     ios::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
     size_t n,m,q;
     cin>>n>>m>>q;
-    vector<int> a(n),b(m);
-    for (int& i:a) cin>>i;
-    for (int& i:b) cin>>i;
-    STtable<int,less<int>> al(a.cbegin(),n),bl(b.cbegin(),m);
-    STtable<int,less<int>> ag(a.cbegin(),n),bg(b.cbegin(),m);
+    vector<li> a(n),b(m);
+    for (li& i:a) cin>>i;
+    for (li& i:b) cin>>i;
+    vector<li> ap(a),aq(a);
+    for (li& i:ap) if (i<0) i=numeric_limits<li>::max();
+    for (li& i:aq) if (i>=0) i=numeric_limits<li>::min();
+    STtable<li,greater<li>> stax(a.begin(),n),stbx(b.begin(),n),staq(aq.begin(),n);
+    STtable<li,less<li>> stan(a.begin(),n),stbn(b.begin(),n),stap(ap.begin(),n);
+    while (q--){
+        size_t l1,r1,l2,r2;
+        cin>>l1>>r1>>l2>>r2;
+        --l1,--l2;
+        li ansax=stax.get(l1,r1),ansbx=stbx.get(l2,r2),ansan=stan.get(l1,r1),ansbn=stbn.get(l2,r2),ansap=stap.get(l1,r1),ansaq=staq.get(l1,r1);
+        li ans=max(ansax*(ansax>=0?ansbn:ansbx),ansan*(ansan>=0?ansbn:ansbx));
+        if (ansap!=numeric_limits<li>::max()) ans=max(ans,ansap*(ansap>=0?ansbn:ansbx));
+        if (ansaq!=numeric_limits<li>::min()) ans=max(ans,ansaq*(ansaq>=0?ansbn:ansbx));
+        cout<<ans<<'\n';
+    }
     
     return 0;
 }
