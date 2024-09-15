@@ -1,7 +1,7 @@
 /**
  *    author:  tourist
- *    created: 25.07.2023 10:40:26       
-**/
+ *    created: 25.07.2023 10:40:26
+ **/
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -21,9 +21,7 @@ int main() {
     int n;
     cin >> n;
     vector<long long> a(n);
-    for (int i = 1; i < n; i++) {
-      cin >> a[i];
-    }
+    for (int i = 1; i < n; i++) { cin >> a[i]; }
     vector<long long> extra;
     vector<int> used(n + 1, 0);
     for (int i = 0; i < n - 1; i++) {
@@ -44,9 +42,7 @@ int main() {
     }
     vector<int> left;
     for (int i = 1; i <= n; i++) {
-      if (!used[i]) {
-        left.push_back(i);
-      }
+      if (!used[i]) { left.push_back(i); }
     }
     if (left.size() == 2 && extra[0] == left[0] + left[1]) {
       cout << "YES" << '\n';
